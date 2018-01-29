@@ -7,7 +7,7 @@ ARCH := amd64
 DOCKER_IMAGE := $(NAMESPACE)/$(PROJECT)
 
 VERSION := $(shell cat VERSION)
-#GITSHA := $(shell git rev-parse --short HEAD)
+PHP_VERSION := $(shell cat PHP_VERSION)
 
 all: help
 
@@ -38,7 +38,9 @@ docker:
 release: docker
 	@echo "Pushing $(DOCKER_IMAGE):latest"
 	docker tag $(DOCKER_IMAGE):$(VERSION) $(DOCKER_IMAGE):latest
+	docker tag $(DOCKER_IMAGE):$(VERSION) $(DOCKER_IMAGE):$(PHP_VERSION)
 	docker push $(DOCKER_IMAGE):latest
+	docker push $(DOCKER_IMAGE):$(PHP_VERSION)
 
 clean:
 	docker rmi $(DOCKER_IMAGE):$(VERSION)
